@@ -1,10 +1,10 @@
 ******************************************************************************
                   MSP430 Linker PC v18.1.3                     
 ******************************************************************************
->> Linked Mon Sep 24 17:17:00 2018
+>> Linked Mon Sep 24 21:50:45 2018
 
 OUTPUT FILE NAME:   <buttonInterruptFR2311.out>
-ENTRY POINT SYMBOL: "_c_int00_noinit_noargs"  address: 0000f144
+ENTRY POINT SYMBOL: "_c_int00_noinit_noargs"  address: 0000f148
 
 
 MEMORY CONFIGURATION
@@ -13,7 +13,7 @@ MEMORY CONFIGURATION
 ----------------------  --------  ---------  --------  --------  ----  --------
   BSL0                  00001000   00000800  00000000  00000800  RWIX
   RAM                   00002000   00000400  000000a0  00000360  RWIX
-  FRAM                  0000f100   00000e80  0000006e  00000e12  RWIX
+  FRAM                  0000f100   00000e80  00000072  00000e0e  RWIX
   JTAGSIGNATURE         0000ff80   00000004  00000004  00000000  RWIX  ffff 
   BSLSIGNATURE          0000ff84   00000004  00000004  00000000  RWIX  ffff 
   INT00                 0000ff88   00000002  00000000  00000002  RWIX
@@ -104,16 +104,16 @@ section   page    origin      length       input sections
 
 .const     0    0000f100    00000000     UNINITIALIZED
 
-.text      0    0000f100    00000044     
-                  0000f100    0000003a     main.obj (.text:main)
-                  0000f13a    00000006     rts430x_lc_sd_eabi.lib : exit.c.obj (.text:abort)
-                  0000f140    00000004                            : pre_init.c.obj (.text:_system_pre_init)
+.text      0    0000f100    00000048     
+                  0000f100    0000003e     main.obj (.text:main)
+                  0000f13e    00000006     rts430x_lc_sd_eabi.lib : exit.c.obj (.text:abort)
+                  0000f144    00000004                            : pre_init.c.obj (.text:_system_pre_init)
 
 .text:_isr 
-*          0    0000f144    0000002a     
-                  0000f144    00000014     rts430x_lc_sd_eabi.lib : boot.c.obj (.text:_isr:_c_int00_noinit_noargs)
-                  0000f158    0000000e     main.obj (.text:_isr:Port_1)
-                  0000f166    00000008     rts430x_lc_sd_eabi.lib : isr_trap.asm.obj (.text:_isr:__TI_ISR_TRAP)
+*          0    0000f148    0000002a     
+                  0000f148    00000014     rts430x_lc_sd_eabi.lib : boot.c.obj (.text:_isr:_c_int00_noinit_noargs)
+                  0000f15c    0000000e     main.obj (.text:_isr:Port_1)
+                  0000f16a    00000008     rts430x_lc_sd_eabi.lib : isr_trap.asm.obj (.text:_isr:__TI_ISR_TRAP)
 
 .stack     0    00002360    000000a0     UNINITIALIZED
                   00002360    00000002     rts430x_lc_sd_eabi.lib : boot.c.obj (.stack)
@@ -179,9 +179,9 @@ MODULE SUMMARY
        Module             code   ro data   rw data
        ------             ----   -------   -------
     .\
-       main.obj           72     2         0      
+       main.obj           76     2         0      
     +--+------------------+------+---------+---------+
-       Total:             72     2         0      
+       Total:             76     2         0      
                                                   
     C:\ti\ccsv8\tools\compiler\ti-cgt-msp430_18.1.3.LTS\lib\rts430x_lc_sd_eabi.lib
        boot.c.obj         20     2         0      
@@ -206,7 +206,7 @@ MODULE SUMMARY
                                                   
        Stack:             0      0         160    
     +--+------------------+------+---------+---------+
-       Grand Total:       110    30        160    
+       Grand Total:       114    30        160    
 
 
 GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name 
@@ -291,7 +291,7 @@ address   name
 00000672  BAKMEM9               
 00000673  BAKMEM9_H             
 00000672  BAKMEM9_L             
-0000f13a  C$$EXIT               
+0000f13e  C$$EXIT               
 000002ee  CAPTIOCTL             
 000002ef  CAPTIOCTL_H           
 000002ee  CAPTIOCTL_L           
@@ -450,7 +450,7 @@ address   name
 0000012a  PMMIFG                
 0000012b  PMMIFG_H              
 0000012a  PMMIFG_L              
-0000f158  Port_1                
+0000f15c  Port_1                
 0000030c  RTCCNT                
 0000030d  RTCCNT_H              
 0000030c  RTCCNT_L              
@@ -669,7 +669,7 @@ address   name
 000001cc  WDTCTL_L              
 00002400  __STACK_END           
 000000a0  __STACK_SIZE          
-0000f166  __TI_ISR_TRAP         
+0000f16a  __TI_ISR_TRAP         
 0000ffe2  __TI_int45            
 0000ffe4  __TI_int46            
 0000ffe6  __TI_int47            
@@ -688,11 +688,11 @@ ffffffff  __TI_pprof_out_hndl
 ffffffff  __TI_prof_data_size   
 ffffffff  __TI_prof_data_start  
 ffffffff  __c_args__            
-0000f144  _c_int00_noinit_noargs
+0000f148  _c_int00_noinit_noargs
 0000fffe  _reset_vector         
 00002360  _stack                
-0000f140  _system_pre_init      
-0000f13a  abort                 
+0000f144  _system_pre_init      
+0000f13e  abort                 
 0000f100  main                  
 
 
@@ -1156,12 +1156,12 @@ address   name
 00002360  _stack                
 00002400  __STACK_END           
 0000f100  main                  
-0000f13a  C$$EXIT               
-0000f13a  abort                 
-0000f140  _system_pre_init      
-0000f144  _c_int00_noinit_noargs
-0000f158  Port_1                
-0000f166  __TI_ISR_TRAP         
+0000f13e  C$$EXIT               
+0000f13e  abort                 
+0000f144  _system_pre_init      
+0000f148  _c_int00_noinit_noargs
+0000f15c  Port_1                
+0000f16a  __TI_ISR_TRAP         
 0000ffe2  __TI_int45            
 0000ffe4  __TI_int46            
 0000ffe6  __TI_int47            
