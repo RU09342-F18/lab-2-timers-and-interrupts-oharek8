@@ -1,5 +1,8 @@
 #include <msp430.h> 
+// Kevin O'hare
+// oharek8@students.rowan.edu
 
+// Example code was used to implement the interrupt.
 //******************************************************************************
 //  MSP430G2xx3 Demo - Software Port Interrupt Service on P1.3 from LPM4
 //

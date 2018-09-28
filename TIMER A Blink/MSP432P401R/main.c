@@ -1,5 +1,8 @@
 #include "msp.h"
+// Kevin O'hare
+// oharek8@students.rowan.edu
 
+//Example Code was used to implement the timer interrupt
 /* --COPYRIGHT--,BSD_EX
  * Copyright (c) 2013, Texas Instruments Incorporated
  * All rights reserved.

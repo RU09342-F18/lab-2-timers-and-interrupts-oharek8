@@ -1,7 +1,8 @@
 #include <msp430.h> 
+// Kevin O'hare
+// oharek8@students.rowan.edu
 
-
-/**
+/*
  * main.c
  */
 int main(void)
