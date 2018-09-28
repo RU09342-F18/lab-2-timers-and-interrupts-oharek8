@@ -1,12 +1,6 @@
 # Button Based Delay
-Now that you have begun to familiarize yourself with the TIMER modules, why don't we make an interesting change to our code from the last lab.
+## Summary of Code
+This program sets the period of the LED blink however a button was held down for. It does this by using two interrupts: a timer and a button. A third interrupt is used for a reset button that resets the blink rate to 10 Hz.
 
-## Task
-Setup your microcontroller to initially blink and LED at a rate of 10Hz upon restarting or powering up. Then utilizing one of the buttons on board, a user should be able to set the delay or blinking rate of the LED by holding down a button. The duration in which the button is depressed should then become the new rate at which the LED blinks. As previously stated, you most likely will want to take advantage of the fact that TIMER modules exist and see if you can let them do a bulk of the work for you.
-
-### Extra Work
-## Reset Button
-What is a piece of electronics without a reset button? Instead of relying on resetting your processor using the built in reset circuitry, why not instead use another button to reset the rate back to 10Hz.
-
-## Button Based Hertz
-Most likely using two buttons, what if instead of making a delay loop based on the time, the user could instead enter a mode where the number of times they pressed the button would become the number in Hz of the blinking rate? How do you think you would implement that with just one button?
+## Functionality of Code
+This code uses interrupts from the Button Interrupt and TIMER A assignmnets. The LED initially blinks at 10 Hz until the button is pressed. When the button is pressed and the interrupt is entered, the timer will stop and enter continuous mode. In countinuous mode the timer will keep going until the button is released or the Timer A register rolls over. In out case the clock is fairly slow, so the button can be held for a few seconds before the register hits its max. When the button is released, the current value in the Timer A register is stored in the capture compare register (CCR) and the timer is set back to normal operation. After the button interrupt has ended, the timer will use the new value in the CCR to determine its period.
