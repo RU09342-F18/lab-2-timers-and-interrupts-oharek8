@@ -1,15 +1,53 @@
 # TIMER A Blink
-The TIMER peripherals can be used in many situations thanks to it flexibility in features. For this lab, you will be only scratching the surface as to what this peripheral can do. 
+## Summary of Code
+This program utilizes a capture compare register (CCR) and a timer module to blink an LED at a specific rate. When the timer reaches the value stored in the capture compare register, an interrupt is triggered. It is within this interrupt that the LED is toggled on or off.
 
-## Up, Down, Continuous 
-There are a few different ways that the timer module can count. For starters, one of the easiest to initialize is Continuous counting where in the TIMER module will alert you when its own counting register overflows. Up mode allows you to utilize a Capture/Compare register to have the counter stop at a particular count and then start back over again. You can also set the TIMER to Up/Down mode where upon hitting a counter or the overflow, instead of setting the counter back to zero, it will count back down to zero. 
+## Functionality of Code
+This code uses a Timer A module. Since we are only required to blink the LED at a specific rate I have chosen to set the module to up mode. This means that the timer will only count as high as the value in the CCR befor resetting. When the CCR value is reached, the interrupt begins and the LED is toggled. Since the timer is set to up mode, there is no need to reset the CCR or restart the timer: it will begin to count from zero after the interrupt has ended.
 
-## Task
-Using the TIMER module instead of a software loop, control the speed of two LEDS blinking on your development boards. Experiment with the different counting modes available as well as the effect of the pre-dividers. Why would you ever want to use a pre-divider? What about the Capture and Compare registers? Your code should include a function (if you want, place it in its own .c and .h files) which can convert a desired Hz into the proper values required to operate the TIMER modules.
+## Interrupt Logic
+The interrupt code used for the G2553 is as follows:
+```
+CCTL0 = CCIE;                      // Enable CCR0 interrupt
+TACTL = TASSEL_2 + MC_1 + ID_2;    // Set Timer A to use smclk/8 on up mode
+CCR0 = 50000;                      // Set CCR0 to 50000
+__bis_SR_register(LPM0_bits + GIE);
 
-### Extra Work
-#### Thinking with HALs
-So maybe up to this point you have noticed that your software is looking pretty damn similar to each other for each one of these boards. What if there was a way to abstract away all of the particulars for a processor and use the same functional C code for each board? Just for this simple problem, why don't you try and build a "config.h" file which using IFDEF statements can check to see what processor is on board and initialize particular registers based on that.
+#pragma vector=TIMER0_A0_VECTOR
+__interrupt void Timer_A (void)
+{
+}
+```
+CCTL0 is the control register for the CCR0. Setting CCTL equal to CCIE enables the CCR interrupt. TACTL0 is the control register for the Timer A module. TASSEL controls which clock is used by the timer. ID is a clock divider and MC controls the timer mode. In this case we are using the SMCLK divided by 8 with the timer in up mode.
 
-#### Low Power Timers
-Since you should have already done a little with interrupts, why not build this system up using interrupts and when the processor is basically doing nothing other than burning clock cycles, drop it into a Low Power mode. Do a little research and figure out what some of these low power modes actually do to the processor, then try and use them in your code. If you really want to put your code to the test, using the MSP430FR5994 and the built in super cap, try and get your code to run for the longest amount of time only using that capacitor as your power source.
+The interrupt code for the P401R behaves similarly, but requires much more complicated code that is unlike anything needed for the other boards.
+
+```
+    TA0CCTL0 = CCIE; // TACCR0 interrupt enabled
+    TA0CCR0 = 400;
+    TA0CTL = TIMER_A_CTL_SSEL__ACLK |
+             TIMER_A_CTL_MC__UP | TIMER_A_CTL_ID_3; // ACLK/8, up mode
+
+    SCB->SCR |= SCB_SCR_SLEEPONEXIT_Msk;    // Enable sleep on exit from ISR
+
+    // Ensures SLEEPONEXIT takes effect immediately
+    __DSB();
+
+    // Enable global interrupt
+    __enable_irq();
+
+    NVIC->ISER[0] = 1 << ((TA0_0_IRQn) & 31);
+    while (1)
+    {
+        __sleep();
+
+    __no_operation();                   // For debugger
+    }
+    
+void TA0_0_IRQHandler(void)
+{
+    TIMER_A0->CCTL[0] &= ~TIMER_A_CCTLN_CCIFG; // Turn off Interrupt Flag
+}
+```
+
+The timer setup is the most similar, aside from a few macros. The main differences in macros is seen in the TA0CTL line. In the MSP430's it is possible to a macro and a number, such as "MC_2". For this board however the macros are extended to something like TIMER_A_CTL_MC_UP. Also different from the MSP430's is the need for sleep logic. Without it the code does not operate. Finally the interrupt is carried out by the statement enable_irq(); and a void statement, rather than a #pragma statement.
